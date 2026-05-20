@@ -37,7 +37,6 @@ We also add an **explicit named route** for the custom `verify` action because `
 declare(strict_types=1);
 
 use App\Http\Controllers\GraduationController;
-use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StudentController;
 use Illuminate\Support\Facades\Route;
 
@@ -50,10 +49,6 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-
     Route::resource('graduations', GraduationController::class);
 
     Route::resource('graduations.students', StudentController::class)

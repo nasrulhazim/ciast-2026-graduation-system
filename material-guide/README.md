@@ -15,7 +15,7 @@ A university convocation registration system where:
 
 By the last step you will have built:
 
-- Authentication (Breeze + Pest)
+- Authentication via the [Livewire starter kit](https://laravel.com/docs/13.x/starter-kits#livewire) (Fortify + Flux UI + Pest)
 - Role-based authorization via Policies + Form Requests
 - Full CRUD with UUID routing and `foreignIdFor` foreign keys
 - CSV bulk import + export
@@ -58,7 +58,7 @@ For every step:
 ### Phase 1 — Foundation
 
 - [01 — Laravel 13 scaffold with SQLite + MY locale](./01-laravel-scaffold.md)
-- [02 — Breeze authentication + Pest](./02-breeze-authentication.md)
+- [02 — Livewire starter kit tour (Fortify + Flux UI + Pest)](./02-livewire-starter-kit.md)
 - [03 — UUID + `is_admin` role on users](./03-user-roles-uuid.md)
 
 ### Phase 2 — Domain & Authorization

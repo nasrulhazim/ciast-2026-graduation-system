@@ -12,7 +12,7 @@ Recall the flow:
 
 After step 3, the student can immediately log in, see "My registration" in the nav, and upload their receipt — because the `StudentPolicy::update` rule we wrote in step 5 already allowed `user_id === user->id`.
 
-Implementation is one Eloquent **booted hook** on the `User` model. No new controller, no override of Breeze's `RegisteredUserController`.
+Implementation is one Eloquent **booted hook** on the `User` model. No new controller, no override of the Livewire kit's register Volt component or Fortify's `CreateNewUser` action.
 
 We also reorder `DatabaseSeeder` so the demo `Student` row exists *before* the matching `User` is created — otherwise the booted hook wouldn't have anyone to link to during seeding.
 

@@ -138,7 +138,7 @@ That's all 23 commits. To recap, you now have:
 | Capability | Step |
 |---|---|
 | Laravel 13 + SQLite + MY locale | 01 |
-| Breeze auth + Pest | 02 |
+| Livewire starter kit (Fortify + Flux + Pest) | 02 |
 | UUID routing + admin role | 03 |
 | Graduation + Student domain | 04 |
 | Policies + Form Requests | 05–06 |

@@ -27,7 +27,7 @@ ADMIN                    STUDENT                    ADMIN
 ## Stack
 
 - **Laravel 13** (PHP 8.3+)
-- **Laravel Breeze** for authentication scaffolding (Blade + Tailwind)
+- **[Livewire starter kit](https://laravel.com/docs/13.x/starter-kits#livewire)** for authentication scaffolding (Fortify + Livewire 4 + Flux UI + Tailwind CSS 4)
 - **Tailwind CSS 4** via Vite
 - **SQLite** for local development
 - **Pest** for testing
@@ -170,23 +170,28 @@ php artisan serve   # http://localhost:8000 should show Laravel welcome
 
 ---
 
-### Phase 2 — Authentication via Breeze
+### Phase 2 — Authentication via the Livewire starter kit
 
-**Goal:** Working login/register/password reset/email verification with Blade + Tailwind.
+**Goal:** Working login/register/password reset/email verification/2FA/passkeys with Fortify + Livewire 4 + Flux UI + Tailwind CSS 4.
+
+The kit lands at project creation in Phase 1 (`laravel new graduation-system --livewire --pest`). Phase 2 just confirms it works:
 
 ```bash
-composer require laravel/breeze --dev
-php artisan breeze:install blade --pest
 npm install
 npm run build
 php artisan migrate
+php artisan test   # ~25 kit tests pass
 ```
+
+> Don't try `composer require laravel/livewire-starter-kit` — starter kits are project templates, not installable packages. If Phase 1 was created without the `--livewire` flag, delete the directory and re-run with the flag.
 
 **Verify:**
 - Visit `/register` → can create an account
 - Visit `/login` → can log in
 - After login, redirected to `/dashboard`
-- `/profile` allows editing name/email/password
+- `/settings/profile` allows editing name/email
+- `/settings/appearance` toggles dark mode (and the toggle persists)
+- `/settings/security` exposes password change, 2FA enrolment, and passkey management
 
 ---
 
@@ -1072,7 +1077,7 @@ php artisan route:list --path=graduation
 
 ### Phase 9 — Views
 
-All views extend Breeze's existing `layouts.app`. Tailwind classes used throughout. Follow this file structure:
+All views wrap content with the Livewire starter kit's `<x-layouts::app :title="...">` component (which renders the Flux sidebar shell + dark-mode aware chrome). Tailwind CSS 4 utility classes used throughout — write `<label>` / `<input>` / `<button>` directly with utility chains instead of relying on Breeze-style `<x-text-input>` / `<x-primary-button>` components (the kit doesn't ship those). Follow this file structure:
 
 ```
 resources/views/
@@ -1143,7 +1148,7 @@ resources/views/
 @endif
 ```
 
-Update the Breeze-generated navigation in `resources/views/layouts/navigation.blade.php` to add a "Graduations" link visible to all authenticated users.
+Update the Livewire starter kit's sidebar at `resources/views/layouts/app/sidebar.blade.php` to add a `<flux:sidebar.item icon="academic-cap" :href="route('graduations.index')" :current="request()->routeIs('graduations.*')" wire:navigate>{{ __('Graduations') }}</flux:sidebar.item>` inside the existing **Platform** group. The single sidebar component covers both desktop and the mobile collapsed menu.
 
 ---
 

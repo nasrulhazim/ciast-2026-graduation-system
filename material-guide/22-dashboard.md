@@ -4,7 +4,7 @@
 
 ## Why this step?
 
-Breeze's `/dashboard` is empty: "You're logged in!" That's useless after step 1. We replace it with five summary cards (total graduations, total students, verified, pending, not paid) and a per-graduation breakdown table linking back to each show page.
+The Livewire starter kit's `/dashboard` is empty: "You're logged in!" That's useless after step 1. We replace it with five summary cards (total graduations, total students, verified, pending, not paid) and a per-graduation breakdown table linking back to each show page.
 
 Two things make this step interesting:
 

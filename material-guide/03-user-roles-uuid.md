@@ -19,7 +19,7 @@ We also add an `admin()` state on `UserFactory` so seeders and tests can spin up
 
 ## Prerequisites
 
-- Completed [02 — Breeze authentication](./02-breeze-authentication.md).
+- Completed [02 — Livewire starter kit tour](./02-livewire-starter-kit.md).
 
 ## Steps
 
@@ -61,7 +61,7 @@ return new class extends Migration
 };
 ```
 
-The `uuid` column is **nullable** because existing users (from Breeze tests) don't have one yet — the `HasUuids` trait fills it on `creating` for new rows.
+The `uuid` column is **nullable** because existing users (from the Livewire kit's auth tests) don't have one yet — the `HasUuids` trait fills it on `creating` for new rows.
 
 ### 3. Update the `User` model
 

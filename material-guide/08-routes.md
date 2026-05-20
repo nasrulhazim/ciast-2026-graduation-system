@@ -21,7 +21,7 @@ We also add an **explicit named route** for the custom `verify` action because `
 - Resource routes for graduations: `GET /graduations`, `POST /graduations`, etc.
 - Nested resource routes for students under each graduation, limited to show/edit/update
 - A custom `PATCH /graduations/{graduation}/students/{student}/verify` route
-- All wrapped in the existing `auth` middleware group from Breeze
+- All wrapped in the existing `auth` middleware group from the Livewire starter kit
 
 ## Prerequisites
 

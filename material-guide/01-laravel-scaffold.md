@@ -24,16 +24,18 @@ Setting these in step 1 is much easier than retrofitting them in step 10.
 
 ## Steps
 
-### 1. Create the project
+### 1. Create the project with the Livewire starter kit
 
 From your training root directory:
 
 ```bash
-laravel new graduation-system 
+laravel new graduation-system --livewire --pest
 cd graduation-system
 ```
 
-This downloads Laravel 13, installs dependencies, and copies `.env.example` to `.env`.
+This downloads Laravel 13 + the **[Livewire starter kit](https://laravel.com/docs/13.x/starter-kits#livewire)** (Fortify auth, Livewire 4, Flux UI sidebar shell, dark mode), installs dependencies via `composer install`, picks **Pest** as the test runner, and copies `.env.example` to `.env`.
+
+> If you'd rather use the interactive prompt: run `laravel new graduation-system` and pick **Livewire** at the starter-kit prompt, then **Pest** at the testing-framework prompt.
 
 ### 2. Initialize git
 
@@ -127,4 +129,4 @@ git commit -m "chore: initial Laravel 13 scaffold with SQLite + MY locale"
 
 ## What's next
 
-The project is up, but there's no authentication yet. Move on to [02 — Breeze authentication + Pest](./02-breeze-authentication.md).
+The project is up with the Livewire starter kit already in place. Take a tour of what came pre-wired (register/login/dashboard/settings + Pest tests): [02 — Livewire starter kit tour](./02-livewire-starter-kit.md).

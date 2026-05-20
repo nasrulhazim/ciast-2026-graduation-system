@@ -52,7 +52,7 @@ The system replaces the spreadsheet + email workflow with a single source of tru
 - **NG1.** Online payment gateway integration. Students upload a manual receipt; cash/transfer/cheque handling stays out of band.
 - **NG2.** Robe / cap / accommodation booking subsystems.
 - **NG3.** Mobile-native apps. The web app is responsive and that is sufficient.
-- **NG4.** SSO with the university identity provider. Email + password via Breeze is sufficient.
+- **NG4.** SSO with the university identity provider. Email + password via the Livewire starter kit's Fortify auth (plus optional 2FA and passkeys shipped by the kit) is sufficient.
 - **NG5.** Multi-tenancy across faculties / campuses. A single deployment serves the institution.
 - **NG6.** Public APIs for third-party integrations.
 - **NG7.** Receipt OCR / automatic amount extraction.
@@ -481,9 +481,9 @@ Note: "Linked Student" means a non-admin user whose `user_id` matches at least o
 
 ### 10.7 Accessibility
 
-- **NFR-A11y-1.** Form fields shall have associated `<label>` elements via Breeze's `x-input-label` component.
+- **NFR-A11y-1.** Form fields shall have associated `<label>` elements (native HTML labels paired by `for=` / `id=`; Flux UI primitives also wire ARIA attributes for the kit's own components).
 - **NFR-A11y-2.** Status badges shall convey state by **text content**, not colour alone (e.g. the word "Verified", not just a green dot).
-- **NFR-A11y-3.** Buttons shall be reachable and operable by keyboard. (Inherited from Breeze + native HTML; no custom JS controls in v1.0.)
+- **NFR-A11y-3.** Buttons shall be reachable and operable by keyboard. (Inherited from Livewire starter kit's Flux UI primitives + native HTML; no custom JS controls in v1.0.)
 
 ### 10.8 Browser compatibility
 
@@ -500,7 +500,7 @@ This section describes the chosen stack. The PRD does not mandate a specific sta
 - **Backend:** Laravel 13, PHP 8.3+
 - **Database:** SQLite (dev), MySQL or PostgreSQL (recommended for prod)
 - **Frontend:** Blade + Tailwind CSS 4 (via Vite), Alpine.js for tiny interactions
-- **Auth scaffolding:** Laravel Breeze (Blade preset)
+- **Auth scaffolding:** [Livewire starter kit](https://laravel.com/docs/13.x/starter-kits#livewire) (Laravel Fortify + Livewire 4 + Flux UI + Pest)
 - **Tests:** Pest with `RefreshDatabase`, `Storage::fake`, `Notification::fake`
 - **CSV parsing:** `spatie/simple-excel` (lazy iterator)
 - **CSV export:** native `fputcsv` + `response()->streamDownload()` (no library)

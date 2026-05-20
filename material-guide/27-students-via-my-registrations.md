@@ -216,7 +216,7 @@ That's all 27 commits. The two-track UX is complete:
 
 The journey from `laravel new` to here:
 
-1. Foundation (01–03) — Laravel + Breeze + roles
+1. Foundation (01–03) — Laravel + Livewire starter kit + roles
 2. Domain (04–06) — models, policies, form requests
 3. HTTP (07–10) — controllers, routes, views, storage
 4. Tests (11) — pin the behaviour

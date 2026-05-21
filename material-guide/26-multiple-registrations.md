@@ -203,60 +203,85 @@ Route::get('/my-registrations', MyRegistrationsController::class)
 
 ### 8. Create `resources/views/my-registrations.blade.php`
 
-```blade
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">My registrations</h2>
-    </x-slot>
+The Livewire starter kit wraps every page in `<x-layouts::app>` (a Flux layout component), not the Breeze `<x-app-layout>` / `<x-slot name="header">` pattern. Match the convention used by `graduations/show.blade.php` and `students/show.blade.php`:
 
-    <div class="py-12 max-w-4xl mx-auto sm:px-6 lg:px-8 space-y-4">
+```blade
+<x-layouts::app :title="__('My registrations')">
+    <div class="flex h-full w-full flex-1 flex-col gap-4 rounded-xl">
+
+        <div>
+            <h1 class="text-lg font-semibold text-gray-900 dark:text-neutral-100">
+                {{ __('My registrations') }}
+            </h1>
+            <p class="text-sm text-gray-500 dark:text-neutral-400">
+                {{ $registrations->count() }} {{ Str::plural('registration', $registrations->count()) }} on file.
+            </p>
+        </div>
+
         @forelse ($registrations as $r)
-            <div class="bg-white shadow rounded p-6 flex justify-between items-center">
+            <div class="flex flex-col gap-3 rounded-xl border border-neutral-200 bg-white p-6 shadow-sm dark:border-neutral-700 dark:bg-neutral-900 sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                    <div class="font-semibold">{{ $r->graduation->title }}</div>
-                    <div class="text-sm text-gray-500">
+                    <div class="text-base font-semibold text-gray-900 dark:text-neutral-100">
+                        {{ $r->graduation->title }}
+                    </div>
+                    <div class="text-sm text-gray-500 dark:text-neutral-400">
                         {{ $r->graduation->ceremony_date->format('d M Y') }}
                     </div>
                     <div class="mt-2">
                         @if ($r->isVerified())
-                            <span class="px-2 py-1 text-xs rounded bg-green-100 text-green-700">Verified</span>
+                            <span class="inline-flex items-center rounded-full bg-emerald-50 px-2 py-0.5 text-xs font-medium text-emerald-700 ring-1 ring-emerald-600/20 dark:bg-emerald-500/10 dark:text-emerald-300 dark:ring-emerald-500/30">
+                                Verified
+                            </span>
                         @elseif ($r->hasPaid())
-                            <span class="px-2 py-1 text-xs rounded bg-amber-100 text-amber-700">Pending review</span>
+                            <span class="inline-flex items-center rounded-full bg-amber-50 px-2 py-0.5 text-xs font-medium text-amber-700 ring-1 ring-amber-600/20 dark:bg-amber-500/10 dark:text-amber-300 dark:ring-amber-500/30">
+                                Pending review
+                            </span>
                         @else
-                            <span class="px-2 py-1 text-xs rounded bg-slate-100 text-slate-600">Not paid</span>
+                            <span class="inline-flex items-center rounded-full bg-slate-50 px-2 py-0.5 text-xs font-medium text-slate-700 ring-1 ring-slate-600/20 dark:bg-slate-500/10 dark:text-slate-300 dark:ring-slate-500/30">
+                                Not paid
+                            </span>
                         @endif
                     </div>
                 </div>
+
                 <a href="{{ route('graduations.students.show', [$r->graduation, $r]) }}"
-                   class="bg-indigo-600 text-white px-3 py-2 rounded text-sm">
+                    class="inline-flex items-center self-start rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-indigo-700 sm:self-auto">
                     View / upload receipt
                 </a>
             </div>
         @empty
-            <p class="text-gray-600">You have no registrations yet.</p>
+            <p class="text-sm text-gray-600 dark:text-neutral-300">
+                You have no registrations yet.
+            </p>
         @endforelse
+
     </div>
-</x-app-layout>
+</x-layouts::app>
 ```
 
 ### 9. Update the navigation link
 
-In `resources/views/layouts/navigation.blade.php`, replace the "My registration" link with:
+The Livewire starter kit uses a Flux sidebar (`resources/views/layouts/app/sidebar.blade.php`), not the Breeze `layouts/navigation.blade.php` + `<x-nav-link>` pattern. The sidebar is responsive on its own (`collapsible="mobile"`) — there is no separate mobile nav file to mirror.
+
+In `resources/views/layouts/app/sidebar.blade.php`, inside the `<flux:sidebar.group :heading="__('Platform')">` block, replace the "My registration" item from step 19 with:
 
 ```blade
 @php
-    $count = auth()->user()?->students()->count() ?? 0;
+    $registrationCount = auth()->user()?->students()->count() ?? 0;
 @endphp
 
-@if ($count > 0)
-    <x-nav-link :href="route('my-registrations.index')"
-        :active="request()->routeIs('my-registrations.*')">
-        {{ $count > 1 ? __('My registrations') : __('My registration') }}
-    </x-nav-link>
+@if ($registrationCount > 0)
+    <flux:sidebar.item
+        icon="identification"
+        :href="route('my-registrations.index')"
+        :current="request()->routeIs('my-registrations.*')"
+        wire:navigate>
+        {{ $registrationCount > 1 ? __('My registrations') : __('My registration') }}
+    </flux:sidebar.item>
 @endif
 ```
 
-Mirror the same block in the responsive nav. The link disappears entirely when the user has zero registrations.
+The label pluralises automatically with the count, and the item disappears entirely when the user has zero registrations.
 
 ### 10. Stabilise the sort tests
 

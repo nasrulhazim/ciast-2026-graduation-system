@@ -158,7 +158,46 @@ public function rules(): array
 
 ### 5. Rescope the CSV-import per-row validator
 
-In `StudentController@import`, update the `Validator::make(...)` rules block to use the same `->where(fn ($q) => $q->where('graduation_id', $graduation->id))` clause on `ic`, `email`, and `matric_card`. Otherwise importing a roster for the second graduation would falsely reject duplicates from the first.
+Without this fix, importing a roster for the second graduation will falsely reject any IC / email / matric that already appears in the first graduation, because the validator is still checking *global* uniqueness against the `students` table.
+
+Add `use Illuminate\Validation\Rule;` at the top of `StudentController` (if not already imported), then update the `Validator::make(...)` rules block inside `import()`:
+
+```php
+SimpleExcelReader::create($request->file('csv')->getRealPath(), 'csv')
+    ->getRows()
+    ->each(function (array $row) use ($graduation, &$imported, &$skipped) {
+        $validator = Validator::make($row, [
+            'name' => ['required', 'string', 'max:255'],
+            'ic' => [
+                'required', 'string', 'size:12',
+                Rule::unique('students', 'ic')
+                    ->where(fn ($q) => $q->where('graduation_id', $graduation->id)),
+            ],
+            'email' => [
+                'required', 'email',
+                Rule::unique('students', 'email')
+                    ->where(fn ($q) => $q->where('graduation_id', $graduation->id)),
+            ],
+            'matric_card' => [
+                'required', 'string', 'max:100',
+                Rule::unique('students', 'matric_card')
+                    ->where(fn ($q) => $q->where('graduation_id', $graduation->id)),
+            ],
+            'phone' => ['required', 'string', 'max:20'],
+        ]);
+
+        if ($validator->fails()) {
+            $skipped++;
+
+            return;
+        }
+
+        $graduation->students()->create($validator->validated());
+        $imported++;
+    });
+```
+
+The closure captures `$graduation` from the outer `import()` signature, so the same `graduation_id` is bound on every row.
 
 ### 6. Create `MyRegistrationsController`
 

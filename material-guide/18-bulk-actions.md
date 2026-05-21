@@ -122,7 +122,7 @@ Render the bulk form *outside* the table (e.g. just above it), so the row checkb
           action="{{ route('graduations.students.bulk', $graduation) }}"
           id="bulk-form"
           onsubmit="
-              if (document.querySelectorAll('#bulk-form input[name=\'ids[]\']:checked').length === 0) {
+              if (document.querySelectorAll('input[name=&quot;ids[]&quot;]:checked').length === 0) {
                   alert('Select at least one student.');
                   return false;
               }
@@ -137,6 +137,8 @@ Render the bulk form *outside* the table (e.g. just above it), so the row checkb
     </form>
 @endcan
 ```
+
+> ⚠️ **Don't scope the selector to `#bulk-form`.** The row checkboxes live in the `<table>`, *not* inside the form — they only *reference* it via the HTML5 `form="bulk-form"` attribute. A CSS descendant selector like `#bulk-form input[name="ids[]"]:checked` matches zero rows and the "Select at least one student." alert fires every time. Either query by name alone (as above) or by the `form=` attribute: `input[form="bulk-form"][name="ids[]"]:checked`.
 
 Inside the table `<thead>`, prepend a checkbox column:
 
@@ -303,6 +305,7 @@ git commit -m "feat(students): bulk verify + delete from graduation page"
 - **No cross-graduation scoping** — without `$graduation->students()->whereIn(...)`, an admin on graduation A can delete a student from graduation B. The test on line 5 (above) catches it; **don't skip the test**.
 - **`->delete()` on a relation builder** — `$scope->delete()` works on a query builder. Sending an array to `Student::destroy([...])` would also work but bypass model events. Either is fine here; pick the one your team prefers.
 - **`onchange` "select all" doesn't toggle row checkboxes** — your row checkboxes are inside `<form id="bulk-form">` reference. The vanilla JS query selector `document.querySelectorAll('input[name="ids[]"]')` only matches if `name="ids[]"` is actually on the inputs, not just on the form.
+- **"Select at least one student." fires even though boxes are ticked** — same root cause as the previous bullet but in the submit handler. If the selector is `#bulk-form input[name="ids[]"]:checked`, the `#bulk-form` parent scope is wrong: the row checkboxes are inside the `<table>`, *not* inside the form. They only *reference* the form via HTML5 `form=`, which the descendant combinator does not cross. Drop `#bulk-form` and select by name (or by `[form="bulk-form"]` attribute).
 
 ## What's next
 
